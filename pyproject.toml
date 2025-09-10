@@ -1,0 +1,19 @@
+[project]
+name = "pydataprep"
+version = "0.1.0"
+description = "Data cleansing and preprocessing library in Python"
+authors = [
+    {name = "OriC28",email = "orianacolina.perea@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+license = { file = "LICENSE" }
+dependencies = [
+    "pandas">=2.3.2,
+    "openpyxl">=3.1.5
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
