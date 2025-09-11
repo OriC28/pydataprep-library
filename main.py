@@ -6,4 +6,4 @@ df = pd.read_excel("./data/datatest.xlsx")
 data = df.loc[1]
 header = list(df.columns.values)
 
-print(cl.handle_missing_values(df, 'mean'))
+print(cl.remove_duplicates(df))

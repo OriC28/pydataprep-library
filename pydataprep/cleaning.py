@@ -46,6 +46,15 @@ def handle_missing_values(df: pd.DataFrame, strategy: str = "drop_rows") -> pd.D
     return df_final
 
 
-def remove_duplicates(df: pd.DataFrame):
-    """Removes duplicate values ​​found"""
-    pass
+def remove_duplicates(df: pd.DataFrame) -> str:
+    """Removes duplicate values ​​found
+
+       Args:
+            df (DataFrame): Dataframe object
+
+       Returns:
+            str: Number of duplicates removed
+    """
+    df_without_duplicates = df.drop_duplicates()
+    duplicates_removed = len(df) - len(df_without_duplicates)
+    return f"Number of duplicates removed: {duplicates_removed}"
