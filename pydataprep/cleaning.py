@@ -2,8 +2,16 @@ import pandas as pd
 import numpy as np
 
 
-def handle_missing_values(df: pd.DataFrame, strategy: str):
-    """Handling null values ​​according to the provided strategy"""
+def handle_missing_values(df: pd.DataFrame, strategy: str = "drop_rows") -> pd.DataFrame:
+    """Handling null values ​​according to the provided strategy. Default strategy 'drop_rows'.
+
+       Args:
+            df (DataFrame): Dataframe object
+            strategy (str): Strategy to handle missing values
+
+       Returns:
+            DataFrame object
+    """
 
     df_final = None
     values_rows_sum = df.isna().sum()
