@@ -3,7 +3,7 @@ from pydataprep import preprocessing as pr
 import pandas as pd
 
 
-df = pd.read_excel("./data/datacategories.xlsx")
+df = pd.read_excel("./data/data.xlsx")
 
 # print(cl.remove_duplicates(df))
-print(pr.encode_categorical(df[["Equipo"]], "one_hot"))
+print(pr.encode_categorical(df["Grupo de clientes"], "label"))

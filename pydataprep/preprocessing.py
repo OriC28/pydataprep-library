@@ -9,7 +9,9 @@ def encode_categorical(df: pd.DataFrame, method: str):
         encoded_items = encoder.fit_transform(df)
         return pd.DataFrame(encoded_items, columns=encoder.get_feature_names_out(df.columns))
     elif method == "label":
-        pass
+        encoder = LabelEncoder()
+        encoded_data = encoder.fit_transform(df.values.ravel())
+        return pd.DataFrame({"Category": encoded_data})
     else:
         return "Method not supported."
 
