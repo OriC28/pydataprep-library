@@ -18,3 +18,5 @@ dfx = pd.DataFrame({'ID': [1, 2, 3],
                     'Sexo': ['Femenino', 'Masculino', 'Masculino']})
 print(dfx.equals(cl.handle_missing_values(df, 'drop_cols')))
  """
+
+print(cl.handle_missing_values(df, 'mean'))
