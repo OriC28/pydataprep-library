@@ -3,51 +3,35 @@ import numpy as np
 
 
 def handle_missing_values(df: pd.DataFrame, strategy: str = "drop_rows") -> pd.DataFrame:
-    """Handling null values ​​according to the provided strategy. Default strategy 'drop_rows'.
+    """Handling null values ​​according to the provided strategy."""
 
-       Args:
-            df (DataFrame): Dataframe object
-            strategy (str): Strategy to handle missing values
+    if df.isna().sum().sum() == 0:
+        raise ValueError("No missing values found to handle.")
 
-       Returns:
-            DataFrame object
-    """
-
-    df_final = None
-    values_rows_sum = df.isna().sum()
-    types = [np.float64, np.int64]
-
-    # Validate if values null exists
-    if (sum(values_rows_sum) == 0):
-        raise ValueError("No missing values.")
-
-    # Dropping rows or columns with null values
     if strategy == "drop_rows":
         return df.dropna()
-
     elif strategy == "drop_cols":
         return df.dropna(axis=1)
 
-    # Fill all null values with strategy value
-    elif strategy not in ['drop_rows', 'drop_cols', 'mean', 'median', 'mode']:
-        return df.fillna(strategy)
-
     df_final = df.copy()
+    numeric_types = ['float64', 'int64']
 
-    # Statistical calculations
-    match(strategy):
-        case "mean":
-            for column in df_final.columns:
-                if df[column].dtypes in types:
-                    df_final[column] = df[column].fillna(df[column].mean())
-        case "median":
-            for column in df_final.columns:
-                if df[column].dtypes in types:
-                    df_final[column] = df[column].fillna(df[column].median())
-        case "mode":
-            df_final = df.mode()
+    if strategy in ['mean', 'median', 'mode']:
+        for col in df_final.columns:
+            if df_final[col].dtype in numeric_types and df_final[col].isnull().any():
+                if not df_final[col].dropna().empty:
+                    fill_value = None
+                    if strategy == 'mean':
+                        fill_value = df_final[col].mean()
+                    elif strategy == 'median':
+                        fill_value = df_final[col].median()
+                    elif strategy == 'mode':
+                        fill_value = df_final[col].mode().iloc[0]
 
-    return df_final
+                    df_final[col] = df_final[col].fillna(fill_value)
+        return df_final
+
+    return df.fillna(strategy)
 
 
 def remove_duplicates(df: pd.DataFrame) -> str:
