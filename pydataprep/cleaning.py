@@ -28,6 +28,10 @@ def handle_missing_values(df: pd.DataFrame, strategy: str = "drop_rows") -> pd.D
     elif strategy == "drop_cols":
         return df.dropna(axis=1)
 
+    # Fill all null values with strategy value
+    elif strategy not in ['drop_rows', 'drop_cols', 'mean', 'median', 'mode']:
+        return df.fillna(strategy)
+
     df_final = df.copy()
 
     # Statistical calculations
