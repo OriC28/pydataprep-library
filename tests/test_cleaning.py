@@ -9,20 +9,20 @@ class TestCleaning(TestCase):
 
     def setUp(self):
         """Prepare a clean DataFrame for each test."""
-        self.df = pd.DataFrame({'ID': [1, 2, 3, 4], 'Nombre': ['Pamela', 'Raúl', 'José', 'Ana'], 'Edad': [np.nan, 14, 26, 14], 'Sexo': [
-            'Femenino', 'Masculino', 'Masculino', 'Femenino'], 'Ciudad': [np.nan, 'Punto Fijo', np.nan, np.nan]})
+        self.df = pd.DataFrame({'ID': [1, 2, 3, 4], 'Name': ['Pamela', 'Raúl', 'José', 'Ana'], 'Age': [np.nan, 14, 26, 14], 'Sex': [
+            'Feminine', 'Masculine', 'Masculine', 'Feminine'], 'City': [np.nan, 'Paris', np.nan, np.nan]})
         return super().setUp()
 
     def test_drop_rows_with_nulls(self):
         """Verifies that rows with null values ​​are deleted correctly."""
-        df_expected = pd.DataFrame(self.df[self.df['Nombre'] == 'Raúl'])
+        df_expected = pd.DataFrame(self.df[self.df['Name'] == 'Raúl'])
         pd.testing.assert_frame_equal(
             handle_missing_values(self.df, 'drop_rows'), df_expected)
 
     def test_drop_cols_with_nulls(self):
         """Verifies that columns with null values ​​are deleted correctly."""
         df_expected = self.df.copy()
-        df_expected = df_expected.drop(['Edad', 'Ciudad'], axis=1)
+        df_expected = df_expected.drop(['Age', 'City'], axis=1)
         pd.testing.assert_frame_equal(
             handle_missing_values(self.df, 'drop_cols'), df_expected)
 
@@ -37,7 +37,7 @@ class TestCleaning(TestCase):
     def test_statistical_strategies_ignores_non_numeric_cols(self):
         """Verifies that the statistical strategies do not alter non-numeric columns."""
         df_test = self.df.copy()
-        df_test['Edad'] = [np.nan]*len(df_test['ID'])
+        df_test['Age'] = [np.nan]*len(df_test['ID'])
 
         for strategy in ['mean', 'median', 'mode']:
             with self.subTest(strategy=strategy):
@@ -55,7 +55,7 @@ class TestCleaning(TestCase):
         for strategy, expected_value in strategies_to_test:
             with self.subTest(strategy=strategy):
                 df_expected = self.df.copy()
-                df_expected['Edad'] = df_expected['Edad'].fillna(
+                df_expected['Age'] = df_expected['Age'].fillna(
                     expected_value)
 
                 result_df = handle_missing_values(self.df, strategy)
@@ -68,3 +68,12 @@ class TestCleaning(TestCase):
         df_expected = self.df.copy()
         df_expected = df_expected.fillna(0)
         self.assertRaises(ValueError, handle_missing_values, df_expected)
+
+    def test_remove_duplicates(self):
+        """Verify the correct elimination of duplicate rows."""
+        data_duplicated = {'ID': 1, 'Name': 'Pamela',
+                           'Age': np.nan, 'Sex': 'Feminine', 'City': np.nan}
+        df_expected = pd.concat(
+            [self.df.copy(), pd.DataFrame([data_duplicated])], ignore_index=True)
+        assert remove_duplicates(
+            df_expected) == "Number of duplicates removed: 1"

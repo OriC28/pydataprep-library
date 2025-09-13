@@ -38,12 +38,12 @@ def scale_numerical(df: pd.DataFrame, columns: list, technique: str = "min_max")
             DataFrame object with scaled columns
     """
 
-    # Create object instance
-    scaler = MinMaxScaler() if technique == "min_max" else StandardScaler()
-
     # Validate if technique is supported
     if technique not in ["min_max", "standard"]:
         raise ValueError("Technique not supported.")
+
+    # Create object instance
+    scaler = MinMaxScaler() if technique == "min_max" else StandardScaler()
 
     # Start scaled and transform data
     for column in columns:
